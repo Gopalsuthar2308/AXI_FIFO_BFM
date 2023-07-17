@@ -27,7 +27,8 @@ assign full =(counter==DEPTH);
  
 always @ (posedge clk or negedge rst)
 begin 
-    if (rst)
+    //if (rst)
+    if(!rst) //new updated
     begin
       wr_ptr<='d0;
       rd_ptr<='d0;

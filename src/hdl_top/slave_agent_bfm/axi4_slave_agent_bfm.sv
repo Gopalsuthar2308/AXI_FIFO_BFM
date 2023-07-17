@@ -117,7 +117,7 @@ module axi4_slave_agent_bfm #(parameter int SLAVE_ID = 0)(axi4_if intf);
                                                .rready   (intf.rready)   
                                                );
 
-  bind axi4_slave_driver_bfm slave_assertions S_A (.aclk(aclk),
+  bind axi4_slave_driver_bfm slave_assertions S_A (.aclk(aclk), 
                                                    .aresetn(aresetn),
                                                    .awid(awid),
                                                    .awaddr(awaddr),

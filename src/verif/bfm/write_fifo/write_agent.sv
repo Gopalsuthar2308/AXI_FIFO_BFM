@@ -37,7 +37,7 @@ endclass : write_fifo_agent
 //  parent - parent under which this component is created
 //--------------------------------------------------------------------------------------------
 function write_fifo_agent::new(string name = "write_fifo_agent",
-                                 uvm_component parent );
+                                 uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
 

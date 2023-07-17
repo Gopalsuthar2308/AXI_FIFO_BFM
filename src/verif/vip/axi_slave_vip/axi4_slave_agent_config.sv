@@ -14,6 +14,7 @@ class axi4_slave_agent_config extends uvm_object;
   
   //Variable: has_coverage
   //Used for enabling the master agent coverage
+  //bit has_coverage = 1;
   bit has_coverage;
 
   //Variable: slave_id
@@ -89,5 +90,5 @@ function void axi4_slave_agent_config::do_print(uvm_printer printer);
          
 endfunction : do_print
 
-`endif:cal SetSyn("verilog")
+`endif//:cal SetSyn("verilog")
 

@@ -1,7 +1,6 @@
 //its considered that sop bits will be at starting of the packet
 //the decoded burst length is consaisdered in bytes i.e byte alligned
 //to write into write fifo 2 more signals are required to judge the valid resp
-
 module decoder #  
 
                  (
@@ -221,7 +220,7 @@ module decoder #
     endcase
   end//}
 
-  always @ (*)
+  always @ ( *)
   begin//{
    if ( sop_flag == (fifo_rdata[127:120] == 8'hAA))
    begin//{
@@ -236,7 +235,8 @@ module decoder #
     strobe       = fifo_rdata[64  +: 4];
     rd_req_data  = fifo_rdata[48 +: 16];
    
-    vld_rd_req   = (rd_req_data == 16'h0000_0000_0101_0011);
+    //vld_rd_req   = (rd_req_data == 16'h0000_0000_0101_0011);
+    vld_rd_req   = (rd_req_data == 32'b0000_0000_0000_0000_0000_0000_0101_0011);
     max_payload  = ((2 ** size) * (len));
     mpl_cnt      = max_payload - ('d64 + 'd128);
     mpl_with_eop = max_payload + 'd8;
@@ -252,7 +252,7 @@ module decoder #
   end//}
 
 
-  always @ (*)
+  always @ ( *)
   begin//{
     case(state)
       IDLE:

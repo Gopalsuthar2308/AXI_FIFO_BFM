@@ -21,6 +21,9 @@ package axi4_test_pkg;
   import axi4_slave_seq_pkg::*;
   import axi4_virtual_seq_pkg::*;
 
+  //import fifo_bfm_test_pkg::*;
+  //import fifo_bfm_seq_pkg::*;
+
   //including base_test for testing
   `include "axi4_base_test.sv"
   `include "assertion_base_test.sv"
@@ -92,8 +95,10 @@ package axi4_test_pkg;
 
   `include "axi4_non_blocking_write_read_rand_test.sv"
   `include "axi4_blocking_write_read_rand_test.sv"
-  
 
+
+  //`include "fifo_bfm_base_test.sv"
+  //`include "fifo_bfm_wr_rd_test.sv"
 endpackage : axi4_test_pkg
 
 `endif

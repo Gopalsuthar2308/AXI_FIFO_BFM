@@ -19,7 +19,7 @@ endclass:fifo_bfm_base_seq
 // Parameters:
 //  name - fifo_bfm_base_seq
 //-----------------------------------------------------------------------------
-function fifo_bfm_base_seq::new(string name="fifo_bfm_base_seq");
+function fifo_bfm_base_seq::new(string name="fifo_bfm_base_seq", uvm_component parent = null);
 super.new(name);
 endfunction:new
 

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 interface fifo_if(input logic clk,rst);
   logic wr_en;
   logic rd_en;
@@ -26,7 +28,7 @@ interface fifo_if(input logic clk,rst);
     input rd_data;
   endclocking
 
-  modport DRIVER (clocking fifo_driver_cb,input clk);
-  modport MONITOR (clocking fifo_monitor_cb,input clk);
+  modport DRIVER (clocking fifo_driver_cb,input clk,rst);
+  modport MONITOR (clocking fifo_monitor_cb,input clk,rst);
 
 endinterface

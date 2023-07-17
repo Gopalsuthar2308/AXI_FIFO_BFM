@@ -5,7 +5,7 @@
 // Class: write_fifo_sequencer
 // <Description_here>
 //--------------------------------------------------------------------------------------------
-class write_fifo_sequencer extends uvm_sequencer#(write_fifo_seq_item);
+class write_fifo_sequencer extends uvm_sequencer#(fifo_sequence_item);
   `uvm_component_utils(write_fifo_sequencer)
 
   //-------------------------------------------------------
@@ -23,8 +23,7 @@ endclass : write_fifo_sequencer
 //  name - write_fifo_sequencer
 //  parent - parent under which this component is created
 //--------------------------------------------------------------------------------------------
-function write_fifo_sequencer::new(string name = "write_fifo_sequencer",
-                                 uvm_component parent = );
+function write_fifo_sequencer::new(string name = "write_fifo_sequencer",uvm_component parent );
   super.new(name, parent);
 endfunction : new
 

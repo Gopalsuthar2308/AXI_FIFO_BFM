@@ -11,11 +11,11 @@ class read_fifo_monitor extends uvm_component;
   //variable :cgf_h
   //Declaring the read agent
 
-  fifo_seq_item pkt1;
+  fifo_sequence_item pkt;
 
-  virtual fifo_interface intf;
+  virtual fifo_if intf;
 
-  uvm_analysis_port #(fifo_seq_item)item_collected_port1;
+  uvm_analysis_port #(fifo_sequence_item)item_collected_port1;
 
   function new(string name="read_fifo_monitor",uvm_component parent);
      super.new(name,parent);
@@ -27,20 +27,20 @@ endfunction
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
-  extern function new(string name = "read_fifo_monitor", uvm_component parent = null);
+  //extern function new(string name = "read_fifo_monitor", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
 
 endclass : read_fifo_monitor
   
-  virtual function void build_phase(uvm_phase phase);
+  function void read_fifo_monitor::build_phase(uvm_phase phase);
     super.build_phase(phase);
-    uvm_config_db#(virtual fintf)::get(this, "", "vif", intf);
+    uvm_config_db#(virtual fifo_if)::get(this, "", "vif", intf);
   endfunction
 
 
-   task run_phase(uvm_phase phase);
-     pkt1=fifo_seq_item::type_id::create("pkt1");
+   task read_fifo_monitor::run_phase(uvm_phase phase);
+     pkt=fifo_sequence_item#()::type_id::create("pkt");
 
     // @(posedge intf.clk);
     // @(posedge intf.clk);
@@ -48,22 +48,20 @@ endclass : read_fifo_monitor
      forever begin
        @(posedge intf.clk);
 
-       pkt1.wr<=intf.wr;
-       pkt1.rd<=intf.rd;
+       pkt.wr_en<=intf.wr_en;
+       pkt.rd_en<=intf.rd_en;
 
-       pkt1.data_out<=intf.data_out;
-       pkt1.fifo_cnt<=intf.fifo_cnt;
-       pkt1.empty<=intf.empty;
-       pkt1.full<=intf.full;
-       pkt1.display("MONITOR_2");
+       pkt.rd_data<=intf.rd_data;
+       //pkt.fifo_cnt<=intf.fifo_cnt;
+       pkt.empty<=intf.empty;
+       pkt.full<=intf.full;
+       $display("MONITOR_2");
 
-       item_collected_port1.write(pkt1);
+       item_collected_port1.write(pkt);
 
 
        end
        endtask
- endclass
-
 
 `endif
 
