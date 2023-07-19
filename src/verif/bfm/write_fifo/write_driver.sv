@@ -98,6 +98,7 @@ task write_fifo_driver::run_phase(uvm_phase phase);
       $display("DRIVER");
       
       `uvm_info("WRITE_FIFO_DRIVER", $sformatf("Data send to fifo_interface  wr_en : %0d , rd_en : %0d",pkt.wr_en,pkt.rd_en), UVM_NONE);
+      `uvm_info("WRITE_FIFO_DRIVER test", $sformatf("type of axi : %0d ",pkt.type_of_axi), UVM_NONE);
     end
   endtask
 
@@ -106,7 +107,7 @@ task write_fifo_driver::run_phase(uvm_phase phase);
     @(posedge intf.clk);
     intf.wr_en<=pkt.wr_en;
     intf.rd_en<=pkt.rd_en;
-    //intf.data_in<=pkt.data_in;
+    intf.wr_data<=pkt.wr_data;  //new updated
     // Write Address Channel
     
     /*

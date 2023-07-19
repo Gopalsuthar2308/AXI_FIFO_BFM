@@ -9,7 +9,8 @@ class fifo_bfm_wr_rd_seq extends fifo_bfm_base_seq;
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
-  extern function new(string name = "fifo_bfm_wr_rd_seq", uvm_component parent = null);
+  //extern function new(string name = "fifo_bfm_wr_rd_seq", uvm_component parent = null);
+  extern function new(string name = "fifo_bfm_wr_rd_seq");
   extern virtual task body();
 
 endclass:fifo_bfm_wr_rd_seq
@@ -22,7 +23,8 @@ endclass:fifo_bfm_wr_rd_seq
 //  name - fifo_bfm_wr_rd_seq
 //-----------------------------------------------------------------------------
 
-function fifo_bfm_wr_rd_seq::new(string name="fifo_bfm_wr_rd_seq",uvm_component parent = null);
+//function fifo_bfm_wr_rd_seq::new(string name="fifo_bfm_wr_rd_seq",uvm_component parent = null);
+function fifo_bfm_wr_rd_seq::new(string name="fifo_bfm_wr_rd_seq");
 super.new(name);
 endfunction:new
 

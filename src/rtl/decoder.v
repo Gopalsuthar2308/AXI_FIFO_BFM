@@ -115,7 +115,7 @@ module decoder #
   end//}
 
 
-  always @ (*)
+  always @ ( *)
   begin//{
     //FSM State transition
     case (state)
@@ -235,8 +235,8 @@ module decoder #
     strobe       = fifo_rdata[64  +: 4];
     rd_req_data  = fifo_rdata[48 +: 16];
    
-    //vld_rd_req   = (rd_req_data == 16'h0000_0000_0101_0011);
-    vld_rd_req   = (rd_req_data == 32'b0000_0000_0000_0000_0000_0000_0101_0011);
+    vld_rd_req   = (rd_req_data == 16'h0000_0000_0101_0011);
+    //vld_rd_req   = (rd_req_data == 32'b0000_0000_0000_0000_0000_0000_0101_0011);
     max_payload  = ((2 ** size) * (len));
     mpl_cnt      = max_payload - ('d64 + 'd128);
     mpl_with_eop = max_payload + 'd8;

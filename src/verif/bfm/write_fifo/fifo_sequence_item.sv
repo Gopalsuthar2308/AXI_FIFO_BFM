@@ -11,7 +11,7 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   rand bit rd_en;
   rand bit full;
   rand bit empty;
-  bit [127:0] wr_data;
+  bit [127:0] wr_data; 
   bit [127:0] rd_data;
 
   const logic [7:0] sop=8'b01010101;

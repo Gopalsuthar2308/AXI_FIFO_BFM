@@ -8,7 +8,8 @@ class fifo_bfm_base_seq extends uvm_sequence#(fifo_sequence_item);
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
-  extern function new(string name = "fifo_bfm_base_seq", uvm_component parent = null);
+  //extern function new(string name = "fifo_bfm_base_seq", uvm_component parent = null);
+  extern function new(string name = "fifo_bfm_base_seq");
 
 endclass:fifo_bfm_base_seq
 
@@ -19,7 +20,8 @@ endclass:fifo_bfm_base_seq
 // Parameters:
 //  name - fifo_bfm_base_seq
 //-----------------------------------------------------------------------------
-function fifo_bfm_base_seq::new(string name="fifo_bfm_base_seq", uvm_component parent = null);
+//function fifo_bfm_base_seq::new(string name="fifo_bfm_base_seq", uvm_component parent = null);
+function fifo_bfm_base_seq::new(string name="fifo_bfm_base_seq");
 super.new(name);
 endfunction:new
 
