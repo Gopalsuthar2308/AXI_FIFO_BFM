@@ -14,11 +14,11 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   bit [127:0] wr_data; 
   bit [127:0] rd_data;
 
-  const logic [7:0] sop=8'b01010101;
-  const logic [7:0] eop=8'b10101011;
+  const logic [7:0] sop=8'b10101010;  //new updated
+  const logic [7:0] eop=8'b01010011;
   //packet = [];
   enum bit [2:0] {axi_fifo_write_address_enable=0,
-                           axi_fifo_write_data_enable1=1,
+                           axi_fifo_write_data_enable=1,
                            axi_fifo_read_address_enable=2,
                            axi_fifo_read_data_enable=3,
                            axi_fifo_response_enable=4} type_of_axi;
@@ -33,8 +33,8 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   rand bit [1:0] fifo_awlock;
   rand bit [1:0] fifo_awcache;
   rand bit [2:0] fifo_awprot;
-  //rand bit [3:0] awqos;
-  //rand bit [3:0] awregion;
+  rand bit [3:0] fifo_awqos;
+  rand bit [3:0] fifo_awregion;
   //logic awuser;
   //logic awvalid;
   //logic awready;
@@ -64,8 +64,8 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   rand bit [1:0] fifo_arlock;
   rand bit [1:0] fifo_arcache;
   rand bit [2:0] fifo_arprot;
-  //rand bit [3:0] fifo_arqos;
-  //rand bit [3:0] fifo_arregion;
+  rand bit [3:0] fifo_arqos;
+  rand bit [3:0] fifo_arregion;
   //rand bit [3:0] fifo_aruser;
   //logic arvalid;
   //logic arready;
@@ -89,8 +89,8 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   `uvm_field_int(fifo_awlock,UVM_ALL_ON )
   `uvm_field_int(fifo_awcache,UVM_ALL_ON)
   `uvm_field_int(fifo_awprot,UVM_ALL_ON)
-  //`uvm_field_int(awqos,UVM_ALL_ON)
-  //`uvm_field_int(awregion,UVM_ALL_ON)
+  `uvm_field_int(fifo_awqos,UVM_ALL_ON)
+  `uvm_field_int(fifo_awregion,UVM_ALL_ON)
   
   `uvm_field_int(fifo_wid,UVM_ALL_ON)
   `uvm_field_int(fifo_wdata,UVM_ALL_ON)
@@ -114,9 +114,9 @@ class fifo_sequence_item #(int ADDRESS_WIDTH=32,DATA_WIDTH=128) extends uvm_sequ
   `uvm_field_int(fifo_arlock,UVM_ALL_ON)
   `uvm_field_int(fifo_arcache,UVM_ALL_ON)
   `uvm_field_int(fifo_arprot,UVM_ALL_ON)
-  //`uvm_field_int(arqos,UVM_ALL_ON)
-  //`uvm_field_int(arrigion,UVM_ALL_ON)
-  //`uvm_field_int(aruser,UVM_ALL_ON)
+  `uvm_field_int(fifo_arqos,UVM_ALL_ON)
+  `uvm_field_int(fifo_arregion,UVM_ALL_ON)
+  //`uvm_field_int(fifo_aruser,UVM_ALL_ON)
   //`uvm_field_int(arvalid,UVM_ALL_ON)
   //`uvm_field_int(arready,UVM_ALL_ON)
 

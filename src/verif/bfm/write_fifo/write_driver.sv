@@ -22,8 +22,10 @@ class write_fifo_driver extends uvm_driver#(fifo_sequence_item);
   bit[127:0] queue3[$];
   bit[127:0] queue4[$];
 
-  bit [1023:0] packet;
+  bit [1095:0] packet;
 
+  int j=0,k=127;
+  int i;
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
@@ -107,7 +109,8 @@ task write_fifo_driver::run_phase(uvm_phase phase);
     @(posedge intf.clk);
     intf.wr_en<=pkt.wr_en;
     intf.rd_en<=pkt.rd_en;
-    intf.wr_data<=pkt.wr_data;  //new updated
+    //intf.wr_data<=pkt.wr_data;  //new updated
+    //intf.wr_data<=packet;  //new updated
     // Write Address Channel
     
     /*
@@ -142,36 +145,76 @@ if(pkt.type_of_axi == 4) begin
    end
    */
 
+  //Packet = {SOP (8 bits) + TXN_ID (4 bits) + ADDR (32 bits) + LEN (4 bits) + SIZE (3 bits) + BURST (2 bits) + LOCK (2 bits) + CACHE (2 bits) + PROT (3 bits) + STROBE (4 bits) + DATA (1024 bits) + EOP (8 bits)}
+   //pkt.type_of_axi = 1;
+  //pkt.type_of_axi=pkt.type_of_axi.next;
     if(pkt.type_of_axi == 0) begin
-      packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_awid, pkt.fifo_awlen, pkt.fifo_awsize, pkt.fifo_awburst, pkt.fifo_awaddr , pkt.eop};
-      queue0.push_back(pkt.fifo_awaddr);
+      //packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_awid, pkt.fifo_awlen, pkt.fifo_awsize, pkt.fifo_awburst, pkt.fifo_awaddr , pkt.eop};
+      packet = {pkt.sop,pkt.fifo_awid, pkt.fifo_awaddr, pkt.fifo_awlen, pkt.fifo_awsize, pkt.fifo_awburst, pkt.fifo_awlock, pkt.fifo_awcache, pkt.fifo_awprot, pkt.fifo_wstrb,40'b0000000000000000000000000000000000000000, pkt.eop};
+      queue0.push_back(packet);
+      //queue0.push_back(pkt.fifo_awaddr);
+      //intf.wr_data <= packet;
+      intf.wr_data <= queue0[0];
+       queue0.pop_front();
+      //queue0.push_back(packet);
     end
 
-// Write Data Channel
-if(pkt.type_of_axi == 1) begin
-      packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_wid, pkt.fifo_wstrb, pkt.fifo_wdata, pkt.fifo_wlast, pkt.eop};
-        queue1.push_back(pkt.fifo_wdata);
-        intf.wr_data <= queue1[0];
-        queue1.pop_front();
-      end
+      `uvm_info("WRITE_FIFO_DRIVER packet [0]", $sformatf("packet : %0h  awaddr = %0h awsize = %0h awlen = %0h",packet,pkt.fifo_awaddr,pkt.fifo_awsize,pkt.fifo_awlen), UVM_NONE);
 
+      // Write Data Channel
+if(pkt.type_of_axi == 1) begin
+      //packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_wid, pkt.fifo_wstrb, pkt.fifo_wdata, pkt.fifo_wlast, pkt.eop};
+      //packet = {pkt.sop,pkt.fifo_wid, pkt.fifo_wstrb, pkt.fifo_wdata, pkt.fifo_wlast, pkt.eop};
+      packet = {pkt.sop,pkt.fifo_awid, pkt.fifo_awaddr, pkt.fifo_awlen, pkt.fifo_awsize, pkt.fifo_awburst, pkt.fifo_awlock, pkt.fifo_awcache, pkt.fifo_awprot, pkt.fifo_wstrb,pkt.fifo_wdata, pkt.eop};
+        //queue1.push_back(packet);
+        //queue1.push_back(pkt.fifo_wdata);
+        //intf.wr_data <= queue1[0];
+        //queue1.pop_front();
+        //intf.wr_data <= packet;
+       // int j=0,k=127;
+        //for(i=0;i<2;i++) begin
+          queue1.push_back(packet[127:0]);
+          queue1.push_back(packet[255:128]);
+          //queue1.push_back(packet[127:0]);
+          `uvm_info("WRITE_FIFO_DRIVER packet [1]", $sformatf("Q0 = %0h",queue1[0]), UVM_NONE);
+          `uvm_info("WRITE_FIFO_DRIVER packet [1]", $sformatf("Q1 = %0h",queue1[1]), UVM_NONE);
+          //queue1.push_back(packet[k:j]);
+          //j=j+128;
+          //k=k+128;
+        //end
+          intf.wr_data=queue1.pop_front();
+          `uvm_info("WRITE_FIFO_DRIVER packet [1]", $sformatf("intf.wr_data 0 = %0h",intf.wr_data), UVM_NONE);
+         // intf.wr_data=queue1.pop_front();
+         // `uvm_info("WRITE_FIFO_DRIVER packet [1]", $sformatf("intf.wr_data 1 = %0h",intf.wr_data), UVM_NONE);
+      end
+      `uvm_info("WRITE_FIFO_DRIVER packet [1]", $sformatf("packet : %0h, sop = %0h, eop = %0h, wid = %0h, wstrb= %0h, wdata =%0h, wlast= %0h",packet,pkt.sop,pkt.eop,pkt.fifo_wid,pkt.fifo_wstrb,pkt.fifo_wdata,pkt.fifo_wlast), UVM_NONE);
 // Read Address Channel
 if(pkt.type_of_axi == 2) begin
-      packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_arid, pkt.fifo_arlen, pkt.fifo_arsize, pkt.fifo_arburst, pkt.fifo_araddr, pkt.eop};
-       queue2.push_back(pkt.fifo_araddr);
+      //packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_arid, pkt.fifo_arlen, pkt.fifo_arsize, pkt.fifo_arburst, pkt.fifo_araddr, pkt.eop};
+      packet = {pkt.sop,pkt.fifo_arid, pkt.fifo_araddr, pkt.fifo_arlen, pkt.fifo_arsize, pkt.fifo_arburst, pkt.fifo_arlock, pkt.fifo_arcache, pkt.fifo_arprot, 8'b00000000, pkt.eop};
+       //queue2.push_back(pkt.fifo_araddr);
+       intf.wr_data <= packet;
      end
 
+      `uvm_info("WRITE_FIFO_DRIVER packet [2]", $sformatf("packet : %0h ",packet), UVM_NONE);
 // Read Data Channel
+// Packet = {SOP(8 bits) + TXN_ID(4 bits) + READ_DATA(1024 bits) + READ_RESP(4 bits) + EOP(8 bits)}
 if(pkt.type_of_axi == 3) begin
-     packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_rid, pkt.fifo_rresp, pkt.fifo_rlast, pkt.fifo_rdata , pkt.eop};
-      queue3.push_back(pkt.fifo_rdata);
+     packet = {pkt.sop, pkt.fifo_rid, pkt.fifo_rdata ,pkt.fifo_rresp, pkt.eop};
+      //queue3.push_back(pkt.fifo_rdata);
+     intf.wr_data <= packet;
     end
+      `uvm_info("WRITE_FIFO_DRIVER packet [3]", $sformatf("packet : %0h ",packet), UVM_NONE);
 // Write Response Channel
+// Packet = {SOP(8 bits) + TXN_ID(4 bits) + WRITE_RESP(4 bits) + EOP(8 bits)}
 if(pkt.type_of_axi == 4) begin
-     packet = {pkt.sop, pkt.type_of_axi, pkt.fifo_bid, pkt.fifo_bresp, pkt.eop};
-     queue4.push_back(pkt.fifo_bresp);
+     packet = {pkt.sop, pkt.fifo_bid, pkt.fifo_bresp, pkt.eop};
+     //queue4.push_back(pkt.fifo_bresp);
+     intf.wr_data <= packet;
    end
 
+      `uvm_info("WRITE_FIFO_DRIVER packet [4]", $sformatf("packet : %0h ",packet), UVM_NONE);
+  pkt.type_of_axi=pkt.type_of_axi.next;
 endtask : drive
 
 `endif

@@ -37,10 +37,14 @@ task fifo_bfm_wr_rd_seq:: body();
 begin
   fifo_sequence_item req;
   req=fifo_sequence_item#()::type_id::create("req");
+  repeat(2) begin  //
   start_item(req);
-  assert(req.randomize()with{req.wr_en==1 && req.rd_en==1;})
+  //req.type_of_axi=req.axi_fifo_write_address_enable;
+  req.type_of_axi=req.axi_fifo_write_data_enable;
+  assert(req.randomize()with{req.wr_en==1 && req.rd_en==0;})  //
   `uvm_info("WR_RD_SEQ", $sformatf("Data send to Driver  wr_en : %0d , rd_en : %0d",req.wr_en,req.rd_en), UVM_NONE);
   finish_item(req);
+ end  //
 end
 endtask:body
 
